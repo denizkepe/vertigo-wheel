@@ -13,10 +13,12 @@ The player can spin the wheel to win rewards.
 - The player can collect rewards and leave the game at any time.
 - The player can use Revive after getting a bomb.
 - Bomb probability changes based on zone progression and fail streak.
+```text
      Each wheel slice has a weight value. Before the wheel spins, the bomb slice weight is updated with this logic:
         Final Bomb Weight =
         Base Bomb Weight × Zone Multiplier × Mercy Multiplier
     We can adjust how zone multiplier change (lineer, exp. or custom calculations)
+```
 - The player can see what items can be collected at the top of the screen.
 
 ## Editable Content
