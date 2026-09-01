@@ -20,6 +20,7 @@ The player can spin the wheel to win rewards.
     We can adjust how zone multiplier change (lineer, exp. or custom calculations)
 ```
 - The player can see what items can be collected at the top of the screen.
+- Rewards are randomized and higher value poolis on every spin. 
 
 ## Editable Content
 
