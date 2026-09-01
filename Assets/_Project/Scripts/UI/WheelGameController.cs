@@ -18,11 +18,15 @@ public class WheelGameController : MonoBehaviour
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private HudView _hud;
 
+    [SerializeField] private float _rewardGrowth = 1.08f;
+
+    private System.Random _random;
     private SpinResolver _spinResolver;
     private RewardWallet _wallet;
     private ZoneService _zones;
     private PlayerProfile _profile;
     private BombWeightPolicy _bombPolicy;
+    private RewardScaler _rewardScaler;
 
     private IReadOnlyList<WheelSlice> _currentSlices;
 
@@ -31,13 +35,14 @@ public class WheelGameController : MonoBehaviour
 
     private void Awake()
     {
-        System.Random random = new System.Random();
+        _random = new System.Random();
 
-        _spinResolver = new SpinResolver(random);
+        _spinResolver = new SpinResolver(_random);
         _wallet = new RewardWallet();
         _zones = new ZoneService();
         _profile = new PlayerProfile();
         _bombPolicy = new BombWeightPolicy();
+        _rewardScaler = new RewardScaler(_rewardGrowth);
 
         _gameOverPanel.SetActive(false);
 
@@ -70,8 +75,6 @@ public class WheelGameController : MonoBehaviour
 
         ZoneType zoneType = _zones.CurrentZoneType;
         int zone = _zones.CurrentZone;
-
-        _currentSlices = GetWheelConfig(zoneType).Slices;
 
         float[] weights;
 
@@ -178,13 +181,84 @@ public class WheelGameController : MonoBehaviour
     private void BuildWheel()
     {
         ZoneType zoneType = _zones.CurrentZoneType;
+        int zone = _zones.CurrentZone;
 
-        _currentSlices = GetWheelConfig(zoneType).Slices;
+        _currentSlices = CreateRandomSlices(zoneType, zone);
 
         _wheelView.Build(
             _currentSlices,
             GetWheelType(zoneType)
         );
+    }
+
+    private List<WheelSlice> CreateRandomSlices(
+        ZoneType zoneType,
+        int zone
+    )
+    {
+        WheelConfig config = GetWheelConfig(zoneType);
+
+        List<WheelSlice> rewardPool = new List<WheelSlice>();
+        WheelSlice bombSlice = null;
+
+        for (int i = 0; i < config.Slices.Count; i++)
+        {
+            WheelSlice slice = config.Slices[i];
+
+            if (slice.IsBomb)
+                bombSlice = slice;
+            else
+                rewardPool.Add(slice);
+        }
+
+        List<WheelSlice> newSlices = new List<WheelSlice>();
+
+        int rewardSlotCount = config.Slices.Count;
+
+        if (zoneType == ZoneType.Normal && bombSlice != null)
+            rewardSlotCount--;
+
+        for (int i = 0; i < rewardSlotCount; i++)
+        {
+            WheelSlice reward = rewardPool[
+                _random.Next(rewardPool.Count)
+            ];
+
+            newSlices.Add(new WheelSlice
+            {
+                Reward = reward.Reward,
+                Amount = _rewardScaler.ScaleAmount(reward.Amount, zone),
+                Weight = reward.Weight,
+                IsBomb = false
+            });
+        }
+
+        if (zoneType == ZoneType.Normal && bombSlice != null)
+        {
+            newSlices.Add(new WheelSlice
+            {
+                Reward = null,
+                Amount = 0,
+                Weight = bombSlice.Weight,
+                IsBomb = true
+            });
+        }
+
+        ShuffleSlices(newSlices);
+
+        return newSlices;
+    }
+
+    private void ShuffleSlices(List<WheelSlice> slices)
+    {
+        for (int i = slices.Count - 1; i > 0; i--)
+        {
+            int randomIndex = _random.Next(i + 1);
+
+            WheelSlice temp = slices[i];
+            slices[i] = slices[randomIndex];
+            slices[randomIndex] = temp;
+        }
     }
 
     private WheelConfig GetWheelConfig(ZoneType zoneType)
