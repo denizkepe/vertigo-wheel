@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c9159a3e8a75f4f93e9ba9283d05e2, type: 3}
+  m_Name: Wheel_Super
+  m_EditorClassIdentifier: 
+  _type: 2
+  _slices:
+  - Reward: {fileID: 11400000, guid: 219d0f20452a30b9aba089989a14dcc6, type: 2}
+    Amount: 1
+    Weight: 3
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: feb8011d6b04d0c43ffb08f3e271c75d, type: 2}
+    Amount: 1
+    Weight: 3
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: e23c6fa9b7a834144a1e9372f71a01a8, type: 2}
+    Amount: 1000
+    Weight: 2
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: b2a14c2adba51de11438180f955a31b5, type: 2}
+    Amount: 1
+    Weight: 1
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: cdef2224c24f996cdd909f2249d3a28a, type: 2}
+    Amount: 1
+    Weight: 1
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: 6f605a5f308465c479daff7ea3661073, type: 2}
+    Amount: 1
+    Weight: 1
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: 4ec193ade8d5ae847b323c4e5f1040a8, type: 2}
+    Amount: 1
+    Weight: 1
+    IsBomb: 0
+  - Reward: {fileID: 11400000, guid: dd9bf8bcbba33604155bf86b49996715, type: 2}
+    Amount: 1
+    Weight: 0.5
+    IsBomb: 0
